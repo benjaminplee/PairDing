@@ -6,7 +6,6 @@ var http = require('http')
   , server;
     
 server = http.createServer(function(req, res){
-  // your normal server code
   var path = url.parse(req.url).pathname;
   switch (path){
 		case '/':    
