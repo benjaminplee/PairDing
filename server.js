@@ -33,7 +33,7 @@ server = http.createServer(function(req, res){
   }
 });
 
-server.listen(8080);
+server.listen(80);
 
 // socket.io, I choose you
 // simplest chat application evar
