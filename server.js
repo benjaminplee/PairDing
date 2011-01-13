@@ -11,6 +11,10 @@ var server = http.createServer(function(req, res) {
 		res.end();
 		break;	
 	default:
+		if(path.charAt(path.length - 1) == "/") {
+			path = path + "index.html";
+		}
+	
 		fs.readFile(__dirname + path, function(err, data){
 			if (err) {
 				res.writeHead(404, {"Content-Type": "text/plain"});
@@ -26,4 +30,4 @@ var server = http.createServer(function(req, res) {
 	}
 });
  
-server.listen(80);
+server.listen(8080);
