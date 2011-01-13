@@ -49,6 +49,7 @@ io.on('connection', function(client){
     buffer.push(msg);
     if (buffer.length > 15) buffer.shift();
     client.broadcast(msg);
+		client.send({message:[client.sessionId, 'ECHO:' + message]})
   });
 
   client.on('disconnect', function(){
