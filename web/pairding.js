@@ -12,7 +12,7 @@ $(function() {
 		socketio.send(new Date().toString());
 	}
 	
-	var socketio = new io.Socket(null, { port: 8080, rememberTransport: false });
+	var socketio = new io.Socket(null, { port: 80, rememberTransport: false });
 	socketio.connect();
 	
 	socketio.on('message', processMessage);

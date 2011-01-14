@@ -2,7 +2,7 @@ var http = 			require('http')
   , io = 				require('socket.io')
 	, paperboy = 	require('paperboy')
 	, path = 			require('path')
-  , PORT = 8080
+  , PORT = 80
 	, WEBROOT = path.join(path.dirname(__filename), 'web');
 
 var server = http.createServer(function(req, res) {
