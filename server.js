@@ -2,7 +2,7 @@ var http = 			require('http')
   , io = 				require('socket.io')
 	, paperboy = 	require('paperboy')
 	, path = 			require('path')
-  , PORT = 80
+  , PORT = 8080
 	, WEBROOT = path.join(path.dirname(__filename), 'web');
 
 var server = http.createServer(function(req, res) {
@@ -36,22 +36,15 @@ function log(statCode, url, ip, err) {
   console.log(logStr);
 }
 
-var socket_io = io.listen(server)
-  , buffer = [];
+var socket_io = io.listen(server);
   
-socket_io.on('connection', function(client){
-  client.send({ buffer: buffer });
-  client.broadcast({ announcement: client.sessionId + ' connected' });
-  
+socket_io.on('connection', function(client) {
+	console.log('Client connected');
+	
   client.on('message', function(message){
-    var msg = { message: [client.sessionId, message] };
-    buffer.push(msg);
-    if (buffer.length > 15) buffer.shift();
-    client.broadcast(msg);
-		client.send({message:[client.sessionId, 'ECHO:' + message]})
+		console.log('Received message: ' + message)
+		client.broadcast({ text: message });
+		client.send({ text: 'Got it!  ' + message })
   });
 
-  client.on('disconnect', function(){
-    client.broadcast({ announcement: client.sessionId + ' disconnected' });
-  });
 });
