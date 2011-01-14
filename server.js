@@ -1,46 +1,45 @@
-var http = require('http')
-  , url = require('url')
-  , fs = require('fs')
-  , io = require('socket.io')
-  , sys = require(process.binding('natives').util ? 'util' : 'sys')
-  , server;
-    
-server = http.createServer(function(req, res){
-  var path = url.parse(req.url).pathname;
-  switch (path){
-		case '/':    
-			res.writeHead(200, {'Content-Type': 'text/html'});
-			res.write('<html><body><h1>Hola!</h1></body></html>');
-			res.end();
-			break;	
-		default:
-			if(path.charAt(path.length - 1) == "/") {
-				path = path + "index.html";
-			}
+var http = 			require('http')
+  , io = 				require('socket.io')
+	, paperboy = 	require('paperboy')
+	, path = 			require('path')
+  , PORT = 80
+	, WEBROOT = path.join(path.dirname(__filename), 'web');
 
-			fs.readFile(__dirname + path, function(err, data){
-				if (err) {
-					res.writeHead(404, {"Content-Type": "text/plain"});
-					res.end();
-					return;
-				}
+var server = http.createServer(function(req, res) {
+  var ip = req.connection.remoteAddress;
 
-				res.writeHead(200, {'Content-Type': 'text/html'})
-				res.write(data, 'utf8');
-				res.end();
-			});
-			break;
-  }
-});
+  paperboy
+    .deliver(WEBROOT, req, res)
+    .addHeader('Expires', 300)
+    .addHeader('X-PaperRoute', 'Node')
+    .after(function(statCode) {
+      log(statCode, req.url, ip);
+    })
+    .error(function(statCode, msg) {
+      res.writeHead(statCode, {'Content-Type': 'text/plain'});
+      res.end("Error " + statCode);
+      log(statCode, req.url, ip, msg);
+    })
+    .otherwise(function(err) {
+      res.writeHead(404, {'Content-Type': 'text/plain'});
+      res.end("Error 404: File not found");
+      log(404, req.url, ip, err);
+    });
+})
 
-server.listen(80);
+server.listen(PORT);
 
-// socket.io, I choose you
-// simplest chat application evar
-var io = io.listen(server)
+function log(statCode, url, ip, err) {
+  var logStr = statCode + ' - ' + url + ' - ' + ip;
+  if (err)
+    logStr += ' - ' + err;
+  console.log(logStr);
+}
+
+var socket_io = io.listen(server)
   , buffer = [];
   
-io.on('connection', function(client){
+socket_io.on('connection', function(client){
   client.send({ buffer: buffer });
   client.broadcast({ announcement: client.sessionId + ' connected' });
   
