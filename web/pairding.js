@@ -1,15 +1,15 @@
 $(function() {
 	
 	function processMessage(message) {
-		console.log('processing a message', message)
+		// console.log('processing a message', message)
 		
 		$('#messages').append("<p>" + message.text + "</p>");
 	}
 	
-	function sendMessage() {
-		console.log('sending a message')
+	function sendMessage(message) {
+		// console.log('sending a message')
 		
-		socketio.send(new Date().toString());
+		socketio.send(message);
 	}
 	
 	var socketio = new io.Socket(null, { port: 80, rememberTransport: false });
@@ -17,6 +17,23 @@ $(function() {
 	
 	socketio.on('message', processMessage);
 	
-	$('#testButton').click(sendMessage);
+	$('#testButton').click(function() {
+		sendMessage(new Date().toString());
+	});
+	
+	$("#draggable").draggable({
+		start: function() {
+			var offset = $(this).offset();
+			sendMessage('start (' + offset.left + "," + offset.top + ")")
+		},
+		drag: function() {
+			var offset = $(this).offset();
+			sendMessage('drag (' + offset.left + "," + offset.top + ")")
+		},
+		stop: function() {
+			var offset = $(this).offset();
+			sendMessage('stop (' + offset.left + "," + offset.top + ")")
+		}
+	});
 	
 });
