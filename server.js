@@ -43,7 +43,8 @@ socket_io.on('connection', function(client) {
 	
   client.on('message', function(message){
 		console.log('Received message: ' + message)
-		client.broadcast({ text: message });
+		client.broadcast(message);
+		// client.send(message)
   });
 
 });

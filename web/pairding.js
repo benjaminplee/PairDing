@@ -3,7 +3,9 @@ $(function() {
 	function processMessage(message) {
 		// console.log('processing a message', message)
 		
-		$('#messages').append("<p>" + message.text + "</p>");
+		$('#messages').append("<p>" + message.event + "</p>");
+		
+		$('#draggable').css('left', message.offset.left).css('top', message.offset.top)
 	}
 	
 	function sendMessage(message) {
@@ -24,15 +26,15 @@ $(function() {
 	$("#draggable").draggable({
 		start: function() {
 			var offset = $(this).offset();
-			sendMessage('start (' + offset.left + "," + offset.top + ")")
+			sendMessage({ event: 'start', offset: offset })
 		},
 		drag: function() {
 			var offset = $(this).offset();
-			sendMessage('drag (' + offset.left + "," + offset.top + ")")
+			sendMessage({ event: 'drag', offset: offset })
 		},
 		stop: function() {
 			var offset = $(this).offset();
-			sendMessage('stop (' + offset.left + "," + offset.top + ")")
+			sendMessage({ event: 'stop', offset: offset })
 		}
 	});
 	
