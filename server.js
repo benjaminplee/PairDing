@@ -39,8 +39,7 @@ function log(statCode, url, ip, err) {
 var socket_io = io.listen(server);
   
 socket_io.on('connection', function(client) {
-	console.log('Client connected');
-	
+		
   client.on('message', function(message){
 		client.broadcast(message);
   });
