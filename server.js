@@ -42,9 +42,7 @@ socket_io.on('connection', function(client) {
 	console.log('Client connected');
 	
   client.on('message', function(message){
-		console.log('Received message: ' + message)
 		client.broadcast(message);
-		// client.send(message)
   });
 
 });
