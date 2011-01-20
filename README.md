@@ -11,3 +11,8 @@ To Do:
 * handle multiple blocks independently
 * figure out problem with android not moving at all
 * figure out problem with firefox seemingly not firing drag events (just start and stop)
+
+
+Resources / Credits:
+* http://thenounproject.com/
+http://www.iconfinder.com/search/?q=iconset:duesseldorf+add
